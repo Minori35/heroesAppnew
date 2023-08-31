@@ -5,6 +5,8 @@ import { HeroService } from '../../services/heroes.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from "rxjs";
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-new-page',
@@ -42,7 +44,8 @@ export class NewPageComponent implements OnInit{
     private heroServices : HeroService,
     private activatedRoute : ActivatedRoute,
     private router: Router,
-    private snackbar : MatSnackBar){}
+    private snackbar : MatSnackBar,
+    private dialog: MatDialog){}
 
   ngOnInit(): void {
     if(!this.router.url.includes('edit')) return;
@@ -84,6 +87,24 @@ export class NewPageComponent implements OnInit{
     // this.heroServices.updateHero(  )
     
   }
+
+  onConfirmHero(){
+    if( !this.currentHero.id) throw Error("Hero id is required")
+    
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: this.heroForm.value,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(! result) return
+
+      this.heroServices.deleteHeroById(this.currentHero.id);
+
+      this.router.navigate(['/heroes'])
+      
+    });
+  }
+  
 
   showSnackBar(message : string){
     this.snackbar.open(message, 'done',{

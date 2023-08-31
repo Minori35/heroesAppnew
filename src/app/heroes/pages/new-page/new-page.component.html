@@ -49,6 +49,7 @@
                 <div class="flex justify-content-between">
 
                     <button color="warn" mat-flat-button 
+                            (click)="onConfirmHero()"
                             *ngIf="currentHero.id">
                         Borra
                     </button>
