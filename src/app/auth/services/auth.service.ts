@@ -30,7 +30,7 @@ export class AuthService {
 
   }
 
-  checkAuthenyication(): Observable<boolean>{
+  checkAuthentication(): Observable<boolean>{
     
     if(!localStorage.getItem('token')) return of(false);
 
